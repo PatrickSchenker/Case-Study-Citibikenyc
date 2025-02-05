@@ -7491,7 +7491,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [20]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>pyspark
@@ -7566,7 +7566,7 @@ You can choose any language you want to for completing the challenge, however we
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [21]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -7598,25 +7598,30 @@ You can choose any language you want to for completing the challenge, however we
     <span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s2">"spark.sql.shuffle.partitions"</span><span class="p">,</span> <span class="s2">"100"</span><span class="p">)</span> \
     <span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
 
+<span class="c1"># Get the directory where the script is located</span>
+<span class="n">script_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="k">if</span> <span class="s1">'__file__'</span> <span class="ow">in</span> <span class="nb">locals</span><span class="p">()</span> <span class="k">else</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span>
 
-<span class="c1"># Load the data make changes here to a new file path.</span>
-<span class="n">data_path</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">"C:\Users\PatrickSchenker\Desktop\Local_Clones\Case-Study-Citibikenyc\JC-202412-citibike-tripdata.csv"</span>
-<span class="n">storage_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">data_path</span><span class="p">)</span>  <span class="c1"># Extract directory from data path</span>
-<span class="n">notebook_name</span> <span class="o">=</span> <span class="s2">"Case Study Citibikenyc.ipynb"</span>
-<span class="n">timestamp</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%Y%m</span><span class="si">%d</span><span class="s2">_%H%M%S"</span><span class="p">)</span>
-<span class="c1"># Define the output HTML file name</span>
-<span class="n">output_file</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Case_Study_Citibikenyc_v</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">.html"</span>
-<span class="n">output_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">storage_dir</span><span class="p">,</span> <span class="n">output_file</span><span class="p">)</span>
+<span class="c1"># Find the first CSV file in the directory</span>
+<span class="n">csv_files</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">script_dir</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">"*.csv"</span><span class="p">))</span>
+<span class="n">data_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">csv_files</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">if</span> <span class="n">csv_files</span> <span class="k">else</span> <span class="kc">None</span>
 
-<span class="c1"># Check if the file exists before reading</span>
-<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">data_path</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">data_path</span><span class="p">):</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">csv</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inferSchema</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">"File successfully loaded!"</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Error while reading the file: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">data_path</span><span class="p">:</span>
+    <span class="n">storage_dir</span> <span class="o">=</span> <span class="n">script_dir</span>  <span class="c1"># Extract directory from data path</span>
+    <span class="n">timestamp</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%Y%m</span><span class="si">%d</span><span class="s2">_%H%M%S"</span><span class="p">)</span>
+    <span class="n">output_file</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Case_Study_Citibikenyc_v</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">.html"</span>
+    <span class="n">output_path</span> <span class="o">=</span> <span class="n">storage_dir</span> <span class="o">/</span> <span class="n">output_file</span>
+    <span class="n">notebook_name</span> <span class="o">=</span> <span class="s2">"Case Study Citibikenyc.ipynb"</span>
+    <span class="c1"># Check if the file exists before reading</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">data_path</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">data_path</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">csv</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inferSchema</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"File '</span><span class="si">{</span><span class="n">Path</span><span class="p">(</span><span class="n">data_path</span><span class="p">)</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">' successfully loaded!"</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Error while reading the file: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Error: File not found at path: </span><span class="si">{</span><span class="n">data_path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Error: File not found at path: </span><span class="si">{</span><span class="n">data_path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Error: No CSV file found in the directory."</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -7629,7 +7634,7 @@ You can choose any language you want to for completing the challenge, however we
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>File successfully loaded!
+<pre>File 'JC-202412-citibike-tripdata.csv' successfully loaded!
 </pre>
 </div>
 </div>
@@ -7651,7 +7656,7 @@ You can choose any language you want to for completing the challenge, however we
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [22]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">col</span><span class="p">,</span> <span class="n">to_timestamp</span><span class="p">,</span> <span class="n">unix_timestamp</span>
@@ -7668,7 +7673,7 @@ You can choose any language you want to for completing the challenge, however we
 <span class="n">num_long_trips</span> <span class="o">=</span> <span class="n">long_trips</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 
 
-<span class="n">markdown_output</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"**&lt;span style='color:green; font-size:14pt;'&gt;Number of trips over 30 minutes: </span><span class="si">{</span><span class="n">num_long_trips</span><span class="si">}</span><span class="s2">&lt;/span&gt;**"</span>
+<span class="n">markdown_output</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"**&lt;span style='color:green; font-size:16pt;'&gt;Number of trips over 30 minutes: </span><span class="si">{</span><span class="n">num_long_trips</span><span class="si">}</span><span class="s2">&lt;/span&gt;**"</span>
 <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="n">markdown_output</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -7682,7 +7687,7 @@ You can choose any language you want to for completing the challenge, however we
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p><strong><span style="color:green; font-size:14pt;"></span>Number of trips over 30 minutes: 1015</strong></p>
+<p><strong><span style="color:green; font-size:16pt;"></span>Number of trips over 30 minutes: 1015</strong></p>
 </div>
 </div>
 </div>
@@ -7703,7 +7708,7 @@ You can choose any language you want to for completing the challenge, however we
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [23]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">col</span><span class="p">,</span> <span class="n">to_timestamp</span><span class="p">,</span> <span class="n">unix_timestamp</span>
@@ -7711,7 +7716,7 @@ You can choose any language you want to for completing the challenge, however we
 <span class="n">revenue</span><span class="o">=</span><span class="n">num_long_trips</span><span class="o">*</span><span class="mf">0.2</span>
 
 <span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Markdown</span>
-<span class="n">markdown_output</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"**&lt;span style='color:green; font-size:14pt;'&gt;The expected revenue if we charged $0.20 USD for each trip lasting more than 30 minutes would be: </span><span class="si">{</span><span class="n">revenue</span><span class="si">}</span><span class="s2">USD&lt;/span&gt;**"</span>
+<span class="n">markdown_output</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"**&lt;span style='color:green; font-size:16pt;'&gt;The expected revenue if we charged $0.20 USD for each trip lasting more than 30 minutes would be: </span><span class="si">{</span><span class="n">revenue</span><span class="si">}</span><span class="s2">USD&lt;/span&gt;**"</span>
 <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="n">markdown_output</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -7725,7 +7730,7 @@ You can choose any language you want to for completing the challenge, however we
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p><strong><span style="color:green; font-size:14pt;"></span>The expected revenue if we charged $0.20 USD for each trip lasting more than 30 minutes would be: 203.0USD</strong></p>
+<p><strong><span style="color:green; font-size:16pt;"></span>The expected revenue if we charged $0.20 USD for each trip lasting more than 30 minutes would be: 203.0USD</strong></p>
 </div>
 </div>
 </div>
@@ -7746,7 +7751,7 @@ You can choose any language you want to for completing the challenge, however we
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [24]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">required_columns</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"start_lat"</span><span class="p">,</span> <span class="s2">"start_lng"</span><span class="p">,</span> <span class="s2">"end_lat"</span><span class="p">,</span> <span class="s2">"end_lng"</span><span class="p">}</span>
@@ -7866,29 +7871,17 @@ You can choose any language you want to for completing the challenge, however we
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=de8a7a09">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=de8a7a09">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Convert Jupyter Notebook to HTML and store it</span>
 <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="sa">f</span><span class="s1">'jupyter nbconvert --to html --embed-images "</span><span class="si">{</span><span class="n">notebook_name</span><span class="si">}</span><span class="s1">" --output "</span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s1">"'</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[6]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>0</pre>
 </div>
 </div>
 </div>
